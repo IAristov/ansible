@@ -14,17 +14,22 @@
     args:
       chdir:      /etc/ansible
 
-#There need to copy cey for github manually!
-
+#Need to copy key for github manually! This not for use! Check name for key in template or change it.
 #  - name: key
 #    command:      ssh-keygen -t rsa -b 8192
 #    args:
 #      chdir:      /etc/ansible
 
-#  - name: commit
-#    command:      git commit -m 'initial'
-#    args:
-#      chdir:      /etc/ansible
+#  - name: ssh config
+#    template:
+#      src:        /etc/ansible/roles/git_ansible/templates/config
+#      dest:       /root/.ssh/config
+#      mode:       400
+
+#  - name: ssh config
+#    template:
+#      src:        /etc/ansible/roles/git_ansible/templates/config
+#      dest:       /root/.ssh/config
 
 #  - name: github
 #    command:      git remote add github git@github.com:IAristov/ansible.git
