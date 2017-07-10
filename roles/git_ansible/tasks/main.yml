@@ -14,12 +14,25 @@
     args:
       chdir:      /etc/ansible
 
-#  - name: github
-#    command:      git remote add git_rsa git@github.com:IAristov/ansible.git
+#There need to copy cey for github manually!
+
+#  - name: key
+#    command:      ssh-keygen -t rsa -b 8192
 #    args:
 #      chdir:      /etc/ansible
 
-  - name: github_push
-    command:      git push -u git_rsa master
-    args:
-      chdir:      /etc/ansible
+#  - name: commit
+#    command:      git commit -m 'initial'
+#    args:
+#      chdir:      /etc/ansible
+
+#  - name: github
+#    command:      git remote add github git@github.com:IAristov/ansible.git
+#    args:
+#      chdir:      /etc/ansible
+
+#  - name: github_push
+#    command:      git push -u github master
+#    args:
+#      chdir:      /etc/ansible
+
