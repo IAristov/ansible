@@ -1,0 +1,9 @@
+---
+packages:
+  - yum-utils
+  - device-mapper-persistent-data
+  - lvm2
+
+users: 
+  - username: ivan
+  - username: devops

@@ -1,0 +1,32 @@
+---
+  - name: Install dependencies
+    yum:
+      name:         "{{ packages }}"
+      state:        latest
+    register:     docker_dependencies
+
+  - name: Repository
+    when:         docker_dependencies|success
+    command:      yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && yum makecache fast
+    register:     repository
+
+  - name: Install docker 
+    when:         repository|success
+    yum:
+      name:       docker-ce
+      state:      latest
+    notify:
+      - json_file
+      - start_docker
+      - docker-py
+      - clear
+    register:     docker
+
+  - name: usergroup
+    when:         docker|success
+    user: 
+      name:         "{{ item.username }}"
+      append:       yes
+      groups:       'docker'
+    with_items:  
+      - "{{users}}"

@@ -1,0 +1,15 @@
+---
+  - name: init
+    command:      git init
+    args:
+      chdir:      /etc/ansible
+
+  - name: init
+    command:      git add *.cfg hosts playbooks roles
+    args:
+      chdir:      /etc/ansible
+
+  - name: commit
+    command:      git commit -m 'initial'
+    args:
+      chdir:      /etc/ansible

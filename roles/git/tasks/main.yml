@@ -1,0 +1,52 @@
+---
+  - name: Install dependencies
+    yum:
+      name:         "{{ packages }}"
+      state:        latest
+    register:     dependencies
+
+  - name: rpm dir
+    when:         dependencies|success
+    file: path=/etc/yum.repos.d/rpm owner=root group=root mode=640 state=directory recurse=yes
+    register:     rpm_dir
+
+  - name: rpm
+    when:         rpm_dir|success
+    get_url:
+      url:        https://centos7.iuscommunity.org/ius-release.rpm
+      dest:       /etc/yum.repos.d/rpm/
+    register:     rpm
+
+  - name: Repository
+    when:         rpm|success
+    command:      rpm -i ius-release-1.0-15.ius.centos7.noarch.rpm
+    args:
+      chdir:      /etc/yum.repos.d/rpm
+    register:     repo
+
+  - name: git_install
+    when:         repo|success
+    yum:
+      name:       git
+      state:      latest
+    register:     git
+
+  - name: git_username
+    when:         git|success
+    command:      git config --system user.name "ivan"
+    register:     user_name
+
+  - name: git_email
+    when:         user_name|success
+    command:      git config --system user.email "aristov@misxor.ru"
+    register:     email
+
+  - name: git_editor
+    when:         email|success
+    command:      git config --system core.editor nano
+    register:     editor
+
+  - name: git_diff
+    when:         editor|success
+    command:      git config --global merge.tool vimdiff
+

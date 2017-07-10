@@ -1,0 +1,11 @@
+---
+packages:
+  - gcc
+  - gcc-c++
+  - make
+  - patch
+  - openssl-devel
+  - zlib-devel
+  - readline-devel
+  - sqlite-devel
+  - bzip2-devel
