@@ -13,3 +13,13 @@
     command:      git commit -m 'initial'
     args:
       chdir:      /etc/ansible
+
+  - name: github
+    command:      git remote add origin git@github.com:IAristov/ansible.git
+    args:
+      chdir:      /etc/ansible
+
+  - name: github_push
+    command:      git push -u origin master
+    args:
+      chdir:      /etc/ansible
