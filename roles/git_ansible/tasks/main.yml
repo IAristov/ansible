@@ -20,6 +20,6 @@
       chdir:      /etc/ansible
 
   - name: github_push
-    command:      git push -u origin master
+    command:      git push -u git_rsa master
     args:
       chdir:      /etc/ansible
