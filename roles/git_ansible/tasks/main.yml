@@ -15,7 +15,7 @@
       chdir:      /etc/ansible
 
   - name: github
-    command:      git remote add origin git@github.com:IAristov/ansible.git
+    command:      git remote add git_rsa git@github.com:IAristov/ansible.git
     args:
       chdir:      /etc/ansible
 
