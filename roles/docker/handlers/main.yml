@@ -1,20 +1,21 @@
-- name: start_docker
-  service: 
-    name:       docker
-    state:      started
-    enabled:    yes
+---
+  - name: start_docker
+    service: 
+      name:       docker
+      state:      started
+      enabled:    yes
 
-- name: json_file
-  template:
-    src:        /etc/ansible/roles/docker/templates/daemon.json
-    dest:       /etc/docker/daemon.json
+  - name: json_file
+    template:
+      src:        /etc/ansible/roles/docker/templates/daemon.json
+      dest:       /etc/docker/daemon.json
 
-- name: docker-py
-  pip:
-    name:       docker-py
-    state:      present
+  - name: docker-py
+    pip:
+      name:       docker-py
+      state:      present
 
-- name: clear
-  docker_image:
-    name:       hello-world
-    state:      absent
+  - name: clear
+    docker_image:
+      name:       hello-world
+      state:      absent

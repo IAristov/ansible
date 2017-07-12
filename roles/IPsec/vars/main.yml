@@ -1,0 +1,6 @@
+---
+packages:
+  - strongswan
+  - dnsmasq
+  - bc
+  - ntp
