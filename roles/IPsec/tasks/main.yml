@@ -27,5 +27,47 @@
       name:         certbot
       state:        latest
 
-  - name: cert create
-    command: certbot certonly --standalone --email root@{{ ansible_nodename }} -d {{ ansible_nodename }} --rsa-key-size 4096
+#  - name: cert create
+#    command: certbot certonly --standalone --email root@{{ ansible_nodename }} -d {{ ansible_nodename }} --rsa-key-size 4096
+
+  - name: iptables IPsec conf
+    command: iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+
+  - name: iptables Masquerade
+    command: iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j MASQUERADE
+ 
+  - name: iptables android IKEv1 MTU
+    command: iptables -t mangle -I FORWARD -p tcp -m policy --pol ipsec --dir in --syn -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+
+  - name: iptables android IKEv1 MTU2
+    command: iptables -t mangle -I FORWARD -p tcp -m policy --pol ipsec --dir out --syn -m tcpmss --mss 1361:1536 -j TCPMSS --set-mss 1360
+
+  - name: iptables save
+    shell: iptables-save > /etc/iptables.rules
+
+  - name: Pre-up config for iptables via cron
+    cron: 
+      name:                 "iptables"
+      job:                  "iptables-restore < /etc/iptables.rules"
+      special_time:         reboot
+
+  - name: DNSmasq DHCP settings
+    command: echo "dhcp-vendorclass=set:msipsec,MSFT 5.0\ndhcp-range=tag:msipsec,192.168.1.0,static\ndhcp-option=tag:msipsec,6\ndhcp-option=tag:msipsec,249, 0.0.0.0/1,0.0.0.0, 128.0.0.0/1,0.0.0.0" >> /etc/dnsmasq.conf
+
+  - name: restart strongswan
+    service:
+      name:           strongswan
+      enabled:        yes
+      state:          restarted
+
+  - name: restart dnsmasq
+    service:
+      name:           dnsmasq
+      enabled:        yes
+      state:          restarted
+
+  - name: renew sertificates via cron every week
+    cron:
+      name:           "renew certs from letsconfig"
+      weekday:        6
+      job:            "certbot renew"
